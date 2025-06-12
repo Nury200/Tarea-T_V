@@ -11,12 +11,17 @@ app.set('views', path.join(__dirname, 'views'));
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(bodyParser.urlencoded({ extended: false }));
 
-// Página principal
+// Página principal (solo muestra la tabla)
 app.get('/', (req, res) => {
   db.query('SELECT * FROM tareas', (err, resultados) => {
     if (err) throw err;
     res.render('index', { tareas: resultados });
   });
+});
+
+// Ruta para mostrar formulario de nueva tarea
+app.get('/agregar', (req, res) => {
+  res.render('agregar'); // Debes tener views/agregar.ejs
 });
 
 // Ruta para crear tarea
@@ -41,7 +46,7 @@ app.get('/eliminar/:id', (req, res) => {
   });
 });
 
-// Ruta para editar tarea (formulario)
+// Ruta para mostrar formulario de edición
 app.get('/editar/:id', (req, res) => {
   const { id } = req.params;
   db.query('SELECT * FROM tareas WHERE id = ?', [id], (err, resultados) => {
